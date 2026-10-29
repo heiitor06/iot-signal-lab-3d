@@ -1,5 +1,7 @@
 # IoT Signal Lab 3D
 
+**Online:** https://heiitor06.github.io/iot-signal-lab-3d/ (publicado pelo GitHub Actions a cada push na `master`, ver `.github/workflows/deploy-pages.yml`).
+
 Laboratório 3D interativo: um sensor IoT de temperatura transforma a grandeza física em sinal, o sinal viaja por um canal com latência e ruído, passa por um filtro passa-baixa e chega ao gateway. A Transformada de Laplace aparece em cada etapa.
 
 ```
@@ -76,9 +78,9 @@ tests/          simulation.test.ts
 - Pior caso (50 Hz × T_d 5 s ≈ 250 pulsos em voo, 4×): ~46 fps, relógio exato (4,0×).
 - Pulsos numa única InstancedMesh, pool fixo, nada alocado por quadro; interface atualizada a 10 Hz e gráficos a 4 Hz (congelam fora da tela).
 
-## Publicar (opcional)
+## Publicação
 
-Build estático: comando `npm run build`, pasta `dist`. Vercel ou Cloudflare Pages servem sem configuração extra.
+GitHub Pages via Actions: o workflow roda `npm ci`, `npm test` e `npm run build` em `lab-3d/` e publica `lab-3d/dist`. O `base: './'` do Vite faz o build funcionar em qualquer subpasta.
 
 ## Licenças
 

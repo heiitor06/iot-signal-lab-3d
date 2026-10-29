@@ -1,3 +1,5 @@
+> Este repositório tem dois projetos: **IoT Signal Lab 3D** em [`lab-3d/`](lab-3d/) (publicado em https://heiitor06.github.io/iot-signal-lab-3d/) e o **IoT Signal Monitor** 2D, descrito abaixo, na raiz.
+
 # IoT Signal Monitor
 
 Simulador interativo que mostra como a **Transformada de Laplace** modela a resposta de um sensor IoT e como um filtro passa-baixa trata o ruído da leitura. Feito para apresentação na disciplina de Equações Diferenciais Ordinárias.
