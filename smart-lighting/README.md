@@ -1,5 +1,7 @@
 # Smart Lighting Lab 3D
 
+**Online:** https://heiitor06.github.io/iot-signal-lab-3d/smart-lighting/ (publicado pelo GitHub Actions a cada push na `master`, junto com o lab-3d; ver `.github/workflows/deploy-pages.yml`).
+
 Laboratório virtual 3D de controle de iluminação para a disciplina de Equações Diferenciais Ordinárias. Uma sala com janela, mesa, sensor de luminosidade, controlador e lâmpada inteligente funciona em tempo real: a luz natural muda, o sensor mede, o controlador decide e a lâmpada responde, e gráficos, equações e diagrama de blocos acompanham.
 
 ```

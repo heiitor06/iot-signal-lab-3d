@@ -1,4 +1,4 @@
-> Este repositório tem três projetos: **Smart Lighting Lab 3D** em [`smart-lighting/`](smart-lighting/), **IoT Signal Lab 3D** em [`lab-3d/`](lab-3d/) (publicado em https://heiitor06.github.io/iot-signal-lab-3d/) e o **IoT Signal Monitor** 2D, descrito abaixo, na raiz.
+> Este repositório tem três projetos: **Smart Lighting Lab 3D** em [`smart-lighting/`](smart-lighting/) (publicado em https://heiitor06.github.io/iot-signal-lab-3d/smart-lighting/), **IoT Signal Lab 3D** em [`lab-3d/`](lab-3d/) (publicado em https://heiitor06.github.io/iot-signal-lab-3d/) e o **IoT Signal Monitor** 2D, descrito abaixo, na raiz.
 
 # IoT Signal Monitor
 

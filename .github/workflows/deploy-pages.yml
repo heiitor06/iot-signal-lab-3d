@@ -1,4 +1,6 @@
-# Publica o IoT Signal Lab 3D (pasta lab-3d) no GitHub Pages a cada push na master.
+# Publica no GitHub Pages a cada push na master:
+#   /                 IoT Signal Lab 3D (pasta lab-3d)
+#   /smart-lighting/  Smart Lighting Lab 3D (pasta smart-lighting)
 name: Deploy GitHub Pages
 
 on:
@@ -18,22 +20,35 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: lab-3d
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: lab-3d/package-lock.json
-      - run: npm ci
-      - run: npm test
-      - run: npm run build
+          cache-dependency-path: |
+            lab-3d/package-lock.json
+            smart-lighting/package-lock.json
+
+      - name: IoT Signal Lab 3D
+        working-directory: lab-3d
+        run: npm ci && npm test && npm run build
+
+      - name: Smart Lighting Lab 3D
+        working-directory: smart-lighting
+        run: npm ci && npm test && npm run build
+
+      # Os dois builds usam caminhos relativos (base './'), então funcionam em subpasta.
+      - name: Montar o site
+        run: |
+          mkdir -p _site
+          cp -r lab-3d/dist/. _site/
+          mkdir -p _site/smart-lighting
+          cp -r smart-lighting/dist/. _site/smart-lighting/
+
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: lab-3d/dist
+          path: _site
 
   deploy:
     needs: build
