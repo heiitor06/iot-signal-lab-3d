@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { buildPreset, DEFAULT_PRESET, PRESETS, type PresetId } from '../lib/presets'
+import { defaultConfig } from '../lib/defaults'
 import { sanitizeConfig } from '../lib/validation'
 import { LightingEngine } from '../simulation/engine'
 import { electricPower } from '../simulation/metrics'
@@ -9,7 +9,7 @@ import type { CameraView, DisturbanceKind, LabConfig, LightingState, PlaybackSta
  * O motor vive fora do React. A cena 3D lê dele a cada quadro; a interface
  * recebe um retrato (LightingState) a ~10 Hz, sem re-render a 60 fps.
  */
-export const engine = new LightingEngine(buildPreset(DEFAULT_PRESET))
+export const engine = new LightingEngine(defaultConfig())
 
 export type TourMode = 'off' | 'explain' | 'present'
 
@@ -19,8 +19,6 @@ interface LabStore {
   sim: LightingState
   /** Instante simulado da última atualização dos gráficos (mais espaçada que o retrato). */
   chartTime: number
-  /** Preset aplicado por último; some quando o usuário mexe em qualquer parâmetro. */
-  activePreset: PresetId | null
   cameraView: CameraView
   /** Muda a cada pedido, para repetir a mesma vista depois de o usuário girar a câmera. */
   cameraRequest: number
@@ -34,7 +32,8 @@ interface LabStore {
   resume: () => void
   reset: () => void
   setConfig: (patch: Partial<LabConfig>) => void
-  applyPreset: (id: PresetId) => void
+  /** Volta todos os parâmetros ao padrão e reinicia; com `run`, já começa rodando. */
+  restoreDefaults: (run?: boolean) => void
   triggerDisturbance: (kind: DisturbanceKind) => void
   setCameraView: (view: CameraView) => void
   setTour: (mode: TourMode, step?: number) => void
@@ -70,7 +69,6 @@ export const useLabStore = create<LabStore>((set, get) => ({
   status: 'idle',
   sim: snapshot('idle'),
   chartTime: 0,
-  activePreset: DEFAULT_PRESET,
   cameraView: 'overview',
   cameraRequest: 0,
   tourMode: 'off',
@@ -109,22 +107,17 @@ export const useLabStore = create<LabStore>((set, get) => ({
       merged.manualPower = Math.round(sim.lampPower)
     }
     const next = sanitizeConfig(merged, config)
-    // A velocidade da animação não descaracteriza o preset.
-    const onlySpeed = Object.keys(patch).every((k) => k === 'speed')
-    set((s) => ({ config: next, activePreset: onlySpeed ? s.activePreset : null }))
+    set({ config: next })
     // Parado, a simulação recomeça com os valores novos; rodando, eles valem a partir do próximo passo.
     if (status === 'idle') engine.reset(next)
     else engine.updateConfig(next)
     get().publish()
   },
 
-  applyPreset: (id) => {
-    const config = buildPreset(id, get().config.speed)
+  restoreDefaults: (run = false) => {
+    const config = defaultConfig(get().config.speed)
     engine.reset(config)
-    const event = PRESETS.find((p) => p.id === id)?.event
-    if (event) engine.startDisturbance(event)
-    // O preset já começa rodando: o efeito aparece na hora.
-    set({ config, activePreset: id, status: 'running' })
+    set({ config, status: run ? 'running' : 'idle' })
     get().publish()
   },
 
@@ -135,7 +128,7 @@ export const useLabStore = create<LabStore>((set, get) => ({
       set({ status: 'running' })
     } else if (status === 'paused') set({ status: 'running' })
     const base = engine.startDisturbance(kind)
-    set((s) => ({ config: { ...s.config, externalLux: base }, activePreset: null }))
+    set((s) => ({ config: { ...s.config, externalLux: base } }))
     engine.updateConfig(get().config)
     get().publish()
   },

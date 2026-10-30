@@ -20,6 +20,16 @@ export function Note({ children }: { children: ReactNode }) {
   return <p className="text-sm leading-relaxed text-ink-2">{children}</p>
 }
 
+/** Conteúdo avançado, fechado por padrão: a tela principal fica limpa para a aula. */
+export function More({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <details className="group rounded-md border border-line bg-surface-2 px-3 py-2">
+      <summary className="cursor-pointer text-sm font-medium text-ink-2 select-none hover:text-ink">{title}</summary>
+      <div className="mt-2 grid gap-2">{children}</div>
+    </details>
+  )
+}
+
 function Step({ n, children }: { n: number; children: ReactNode }) {
   return (
     <li className="grid grid-cols-[1.5rem_minmax(0,1fr)] items-start gap-2">
@@ -61,9 +71,7 @@ export const LaplacePanel = memo(function LaplacePanel() {
           <Tex math={plantTransferTex(K, tau)} display className="text-lg text-ink" />
         </Step>
       </ol>
-      <p className="text-xs leading-snug text-ink-3">
-        τ controla a velocidade (polo em s = −1/τ = −{formatPlainNumber(1 / tau, 3)} s⁻¹); K controla o ganho (quantos lux cada 1% de potência rende).
-      </p>
+      <p className="text-xs leading-snug text-ink-3">τ controla a velocidade da resposta; K, quantos lux cada 1% de potência rende.</p>
     </Panel>
   )
 })
@@ -101,13 +109,15 @@ export const StepResponsePanel = memo(function StepResponsePanel() {
           ))}
         </tbody>
       </table>
-      <Note>
-        Com u variando (modo automático, perturbações) a fórmula fechada não vale: o simulador integra a EDO passo a passo, Δt ={' '}
-        {formatPlainNumber(CONTROL_DT * 1000)} ms. Euler seria:
-      </Note>
-      <Tex math="y_{k+1}=y_k+\Delta t\,\frac{K u_k-y_k}{\tau}" display className="text-ink" />
-      <Note>Usamos a forma exata para u constante dentro do passo (mesma primeira ordem em Δt, sem erro acumulado):</Note>
-      <Tex math={`y_{k+1}=Ku_k+(y_k-Ku_k)\\,e^{-\\Delta t/\\tau},\\quad e^{-\\Delta t/\\tau}=${formatTexNumber(Math.exp(-CONTROL_DT / tau), 5)}`} display className="text-ink" />
+      <More title="Como o simulador calcula">
+        <Note>
+          Com u variando (modo automático, perturbações) a fórmula fechada não vale: o simulador resolve a EDO passo a passo, a cada{' '}
+          {formatPlainNumber(CONTROL_DT * 1000)} ms. Por Euler:
+        </Note>
+        <Tex math="y_{k+1}=y_k+\Delta t\,\frac{K u_k-y_k}{\tau}" display className="text-ink" />
+        <Note>Na prática usamos a forma exata para u constante dentro do passo (sem erro acumulado):</Note>
+        <Tex math={String.raw`y_{k+1}=Ku_k+(y_k-Ku_k)\,e^{-\Delta t/\tau},\quad e^{-\Delta t/\tau}=${formatTexNumber(Math.exp(-CONTROL_DT / tau), 5)}`} display className="text-ink" />
+      </More>
     </Panel>
   )
 })

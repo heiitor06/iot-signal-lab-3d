@@ -16,8 +16,3 @@ export function energySavings(used: number, fullPower: number): EnergySavings {
   const saved = fullPower - used
   return { saved, percent: (saved / fullPower) * 100 }
 }
-
-/** 1 Wh = 3600 J. */
-export function joulesToWh(joules: number): number {
-  return joules / 3600
-}

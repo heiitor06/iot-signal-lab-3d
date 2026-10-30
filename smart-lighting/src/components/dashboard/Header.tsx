@@ -5,7 +5,7 @@ import { useLabStore } from '../../store/simulationStore'
 export const Header = memo(function Header() {
   const mode = useLabStore((s) => s.tourMode)
   const setTour = useLabStore((s) => s.setTour)
-  const applyPreset = useLabStore((s) => s.applyPreset)
+  const restoreDefaults = useLabStore((s) => s.restoreDefaults)
 
   const open = (target: 'explain' | 'present') => {
     if (mode === target) {
@@ -13,7 +13,7 @@ export const Header = memo(function Header() {
       return
     }
     // O roteiro parte sempre do mesmo cenário (L_ref = 500, L_ext = 200), com o sistema funcionando.
-    applyPreset('presentation')
+    restoreDefaults(true)
     setTour(target, 0)
   }
 

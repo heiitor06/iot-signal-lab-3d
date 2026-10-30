@@ -32,7 +32,9 @@ Projeto acadêmico, não é site de cliente. A spec de 42 seções do Carlos ser
 - Diagrama: a luz externa entra num segundo somador depois de H(s) (L = L_ext + y), mais fiel que o diagrama simplificado da seção 18. Saturação indicada no fio de u.
 - Marcos τ/3τ/5τ: no gráfico ao vivo só no modo manual (malha aberta, onde a fórmula vale) + gráfico analítico da resposta ao degrau sempre visível.
 - Eventos: nuvem (−70% por 9 s e volta), sol intenso (→ 850 lux em 1,5 s), anoitecer (→ 10 lux em 20 s); etapa 8 do roteiro: queda 200 → 50 lux em 2 s, desfeita ao voltar etapas.
-- Presets aplicam e já começam rodando (o efeito aparece na hora); "Controlador lento/rápido" mudam só τ (6 s / 0,5 s).
+
+## Mudanças de escopo
+- 2026-10-30 | Simplificação para o público (professor de Eng. Mecânica, pouco familiarizado com tecnologia), pedida pelo Carlos: os 7 presets (seção 31 da spec) viraram um botão "Voltar ao padrão"; métricas de 10 para 6 cartões (τ, K, Kp ficam nos controles); textos de ajuda encurtados; detalhes da malha fechada e do método numérico em "Ver mais" (fechados por padrão). Nenhuma fase reaberta além de F6–F8 (refeitas: testes, tsc, lint, build, conferência no Chrome).
 
 ## Relatório de qualidade (F7)
 - Bugs achados e corrigidos: céu visível fora da janela; feixe de luz falso; serrilhado de autossombra nas paredes; sol entrando pela frente aberta e por cima da parede (cone estreito + teto só de sombra); rótulos 3D sobrepostos (reposicionados; no roteiro só o da etapa); cartão do roteiro cobrindo a sala (setViewOffset + zoom); HUD colidindo com as vistas em 640–1023 px; texto do erro encostando no bloco K_p; eixo do erro sem o zero; teste com degrau que saturava o comando (hipótese errada no teste, não no modelo).

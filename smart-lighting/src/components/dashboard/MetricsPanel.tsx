@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { formatNumber, formatPlainNumber } from '../../lib/format'
-import { energySavings, joulesToWh } from '../../simulation/metrics'
+import { energySavings } from '../../simulation/metrics'
 import { useLabStore } from '../../store/simulationStore'
 import { SERIES_COLORS } from '../three/layout'
 import { Tex } from '../Tex'
@@ -12,7 +12,7 @@ interface Metric {
   color?: string
 }
 
-/** Os mesmos números do sensor 3D, do controlador, do diagrama e dos gráficos (retrato a 10 Hz). */
+/** Os mesmos números do sensor 3D, do controlador, do diagrama e dos gráficos (retrato a 10 Hz). τ, K e K_p ficam nos controles. */
 export const MetricsPanel = memo(function MetricsPanel() {
   const sim = useLabStore((s) => s.sim)
   const maxPower = useLabStore((s) => s.config.maxPower)
@@ -20,16 +20,12 @@ export const MetricsPanel = memo(function MetricsPanel() {
   const savings = energySavings(sim.energyUsed, sim.energyFullPower)
 
   const metrics: Metric[] = [
-    { label: 'Luminosidade alvo', symbol: 'L_{ref}', value: lux(sim.targetLux), color: SERIES_COLORS.target },
-    { label: 'Luminosidade atual', symbol: 'L(t)', value: lux(sim.totalLux), color: SERIES_COLORS.total },
+    { label: 'Desejada', symbol: 'L_{ref}', value: lux(sim.targetLux), color: SERIES_COLORS.target },
+    { label: 'Atual', symbol: 'L(t)', value: lux(sim.totalLux), color: SERIES_COLORS.total },
     { label: 'Luz externa', symbol: 'L_{ext}(t)', value: lux(sim.externalLux), color: SERIES_COLORS.external },
     { label: 'Luz da lâmpada', symbol: 'y(t)', value: lux(sim.lampLux), color: SERIES_COLORS.lamp },
-    { label: 'Lâmpada', symbol: 'u(t)', value: `${formatNumber(sim.lampPower, 0)}%`, color: SERIES_COLORS.lamp },
+    { label: 'Potência', symbol: 'u(t)', value: `${formatNumber(sim.lampPower, 0)}%`, color: SERIES_COLORS.lamp },
     { label: 'Erro', symbol: 'e(t)', value: lux(sim.error, 1), color: SERIES_COLORS.error },
-    { label: 'Constante de tempo', symbol: '\\tau', value: `${formatNumber(sim.tau, 1)} s` },
-    { label: 'Ganho da planta', symbol: 'K', value: `${formatPlainNumber(sim.plantGain, 2)} lux/%` },
-    { label: 'Ganho do controlador', symbol: 'K_p', value: `${formatPlainNumber(sim.kp, 2)} %/lux` },
-    { label: 'Consumo relativo', symbol: 'P(t)', value: `${formatNumber(sim.electricPower, 1)} W` },
   ]
 
   return (
@@ -59,8 +55,7 @@ export const MetricsPanel = memo(function MetricsPanel() {
           <div className="h-full rounded-full bg-series-total" style={{ width: `${Math.max(0, Math.min(100, savings.percent))}%` }} />
         </div>
         <p className="tabular text-xs leading-snug text-ink-3">
-          Consumido {formatNumber(joulesToWh(sim.energyUsed), 3)} Wh contra {formatNumber(joulesToWh(sim.energyFullPower), 3)} Wh com a lâmpada sempre a 100% (
-          {formatPlainNumber(maxPower)} W) em {formatNumber(sim.time, 1)} s.
+          Agora {formatNumber(sim.electricPower, 1)} W de {formatPlainNumber(maxPower)} W. Comparado com a lâmpada sempre a 100%.
         </p>
       </div>
     </section>

@@ -43,7 +43,7 @@ Os testes cobrem os 7 casos da spec (L_ext = L_ref ⇒ potência → 0; menos lu
 | Perturbações | **Nuvem passando**, **Sol intenso**, **Anoitecer** |
 | Câmera | Visão geral, Sensor, Lâmpada, Controlador, Diagrama (ou arraste/role) |
 
-Roteiro sugerido além da apresentação: preset **Apresentação** → *Nuvem passando* (lâmpada sobe e volta) → *Sol intenso* (lâmpada apaga, L passa de L_ref) → modo **Manual** com u = 80% (resposta de malha aberta com marcos τ, 3τ, 5τ no gráfico) → presets **Controlador lento/rápido**.
+Roteiro sugerido além da apresentação: *Nuvem passando* (lâmpada sobe e volta) → *Sol intenso* (lâmpada apaga, L passa de L_ref) → modo **Manual** com u = 80% (resposta de malha aberta com marcos τ, 3τ, 5τ no gráfico) → τ = 6 s e τ = 0,5 s (resposta lenta × rápida). **Voltar ao padrão** restaura os valores a qualquer momento.
 
 ## Modelo matemático
 
@@ -54,7 +54,7 @@ Roteiro sugerido além da apresentação: preset **Apresentação** → *Nuvem p
 - **Integração:** laço discreto com Δt = 10 ms, na ordem da spec (L_ext → L → e → u → saturação → EDO). A EDO é integrada pela forma exata para u constante no passo, y_{k+1} = K·u_k + (y_k − K·u_k)·e^(−Δt/τ), que coincide com Euler em 1ª ordem e reproduz a solução analítica sem erro acumulado. O laço é estável enquanto (1 − e^(−Δt/τ))(1 + K·K_p) < 2; as faixas aceitas garantem isso.
 - **Energia:** P(t) = P_max·u/100; economia comparada com a lâmpada a 100% o tempo todo.
 
-Padrão (preset Apresentação): L_ref = 500 lux, L_ext = 200 lux, τ = 2 s, K = 8 lux/%, K_p = 2 %/lux, P_max = 20 W. Em regime: e = 17,6 lux, u = 35%, L = 482 lux.
+Padrão (botão **Voltar ao padrão**, `lib/defaults.ts`): L_ref = 500 lux, L_ext = 200 lux, τ = 2 s, K = 8 lux/%, K_p = 2 %/lux, P_max = 20 W. Em regime: e = 17,6 lux, u = 35%, L = 482 lux.
 
 ## Estrutura
 
@@ -68,7 +68,7 @@ src/
     dashboard/  Header, SimulationControls, ControlPanel, SceneHud, TourPanel, MetricsPanel,
                 BlockDiagram, LaplacePanel, ClosedLoopPanel
     charts/     LuxChart, ControlChart, StepResponseChart
-  lib/          presets, tour, validation, chartData, format
+  lib/          defaults, tour, validation, chartData, format
 tests/          simulation.test.ts
 ```
 

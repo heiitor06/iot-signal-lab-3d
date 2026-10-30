@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { PRESETS, buildPreset } from '../src/lib/presets'
+import { defaultConfig } from '../src/lib/defaults'
 import { sanitizeConfig, validateField, LIMITS } from '../src/lib/validation'
 import { saturate, steadyState } from '../src/simulation/controller'
 import { CLOUD_DEPTH, DISTURBANCES, cloudShade, disturbedLux } from '../src/simulation/disturbances'
@@ -18,7 +18,7 @@ import { electricPower, energySavings } from '../src/simulation/metrics'
 import type { LabConfig, Sample } from '../src/types/simulation'
 
 function config(overrides: Partial<LabConfig> = {}): LabConfig {
-  return { ...buildPreset('presentation'), ...overrides }
+  return { ...defaultConfig(), ...overrides }
 }
 
 function run(cfg: LabConfig, seconds: number): LightingEngine {
@@ -270,15 +270,11 @@ describe('Energia', () => {
   })
 })
 
-describe('Presets e validação', () => {
-  it('presets atendem à spec', () => {
-    expect(buildPreset('dark').externalLux).toBe(50)
-    expect(buildPreset('cloudy').externalLux).toBe(200)
-    expect(buildPreset('sunny').externalLux).toBe(600)
-    expect(buildPreset('slow').tau).toBeGreaterThan(buildPreset('presentation').tau)
-    expect(buildPreset('fast').tau).toBeLessThan(buildPreset('presentation').tau)
-    expect(PRESETS.find((p) => p.id === 'dusk')?.event).toBe('dusk')
-    for (const p of PRESETS) expect(sanitizeConfig(buildPreset(p.id), buildPreset(p.id))).toEqual(buildPreset(p.id))
+describe('Configuração padrão e validação', () => {
+  it('padrão segue o cenário da spec e passa na validação', () => {
+    const d = defaultConfig()
+    expect(d).toMatchObject({ targetLux: 500, externalLux: 200, tau: 2, mode: 'automatic' })
+    expect(sanitizeConfig(d, d)).toEqual(d)
   })
 
   it('rejeita τ ≤ 0, texto e potência fora de 0–100%', () => {
