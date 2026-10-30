@@ -17,7 +17,7 @@ Projeto acadêmico, não é site de cliente. A spec de 42 seções do Carlos ser
 | F6 Construção | [x] | `src/` | 2026-10-30 | |
 | F7 Qualidade | [~] | relatório abaixo | 2026-10-30 | Feito: dataviz (paleta validada pelo script), revisão visual no Chrome em 360/768/1366/1920, console. NÃO rodados: `/impeccable critique/audit/polish` e `web-design-guidelines`. |
 | F8 Verificação | [x] | saídas abaixo | 2026-10-30 | |
-| F9 Entrega | [ ] | README + CLAUDE.md | aguardando Carlos | Sem deploy. |
+| F9 Entrega | [x] | README + CLAUDE.md + deploy | 2026-10-30 | Deploy no GitHub Pages pedido pelo Carlos: https://heiitor06.github.io/iot-signal-lab-3d/smart-lighting/ (run 41093583057, build e deploy ok; conferido no navegador). |
 
 ## Autorizações de pular etapa
 - 2026-10-30 | F1–F3 | Sem autorização explícita; a spec pediu implementação completa com tudo definido. Seguido pela regra 0.6.
@@ -56,7 +56,7 @@ Projeto acadêmico, não é site de cliente. A spec de 42 seções do Carlos ser
 - [ ] Carlos decidir se quer as passadas `/impeccable` e `web-design-guidelines` (F7 do processo global).
 - [ ] Carlos confirmar a direção visual e se quer `PRODUCT.md`/`DESIGN.md`.
 - [ ] Opcional: dividir bundles (aviso de chunk > 500 kB).
-- [ ] Opcional: deploy (o workflow atual publica só o lab-3d), só com ok do Carlos.
+- [x] Deploy feito em 2026-10-30 (workflow publica lab-3d na raiz e este app em /smart-lighting/).
 
 ## Placeholders
 - Nenhum.
